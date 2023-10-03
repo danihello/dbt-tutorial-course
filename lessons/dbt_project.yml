@@ -32,4 +32,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   lessons:
-    +materialized:  table
+    +materialized:  table # Defualt all sql models to be materialised as tables
+    +persist_docs: # writes all of our column descriptions into bigquery
+      relation: true
+      columns: true

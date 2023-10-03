@@ -1,0 +1,57 @@
+version: 2
+
+models:
+  - name: int_ecommerce__order_items_products
+    description: "Order item data joined to product data"
+    columns:
+      - name: order_item_id
+        description: ""
+        tests:
+          - not_null
+          - unique
+
+      - name: order_id
+        description: ""
+
+      - name: user_id
+        description: ""
+        tests:
+          - not_null
+
+      - name: product_id
+        description: ""
+        tests:
+          - not_null
+
+      - name: item_sale_price
+        description: ""
+        tests:
+          - not_null
+
+      - name: product_department
+        description: ""
+        tests:
+          - not_null
+
+      - name: product_cost
+        description: ""
+        tests:
+          - not_null
+
+      - name: product_retail_price
+        description: ""
+        tests:
+          - not_null
+
+      - name: product_brand
+        description: ""
+
+      - name: item_profit
+        description: ""
+        tests:
+          - not_null
+
+      - name: item_discount
+        description: ""
+        tests:
+          - not_null
