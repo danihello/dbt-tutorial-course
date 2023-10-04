@@ -7,18 +7,26 @@ models:
       - name: product_id
         description: ""
         tests:
-          - not_null
-          - unique
+          - primary_key:
+              severity: error
 
       - name: cost
         description: "How much the product cost the business to puchase"
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
 
       - name: retail_price
         description: "How much the product retails for on the online store"
         tests:
           - not_null
+          - dbt_utils.expression_is_true:
+              name: retail_price_greater_then_cost
+              expression: ">= cost"
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
+              severity: error
 
       - name: department
         description: "Whether the item is Menswear or Womenswear"
@@ -29,6 +37,7 @@ models:
                 - "Men"
                 - "Women"
               quote: true
+              severity: error
 
       - name: brand
         description: ""
