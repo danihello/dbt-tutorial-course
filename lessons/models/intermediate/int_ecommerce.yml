@@ -7,14 +7,16 @@ models:
       - name: order_item_id
         description: ""
         tests:
-          - not_null
-          - unique
+          - primary_key:
+              severity: error
 
       - name: order_id
         description: ""
+        tests:
+          - not_null
 
       - name: user_id
-        description: ""
+        description: "Unique identifier for a user"
         tests:
           - not_null
 
@@ -24,34 +26,38 @@ models:
           - not_null
 
       - name: item_sale_price
-        description: ""
+        description: "How much the item sold for"
         tests:
           - not_null
 
       - name: product_department
-        description: ""
+        description: "Whether the item is Menswear or Womenswear"
         tests:
           - not_null
 
       - name: product_cost
-        description: ""
+        description: "How much the product cost the business to purchase"
         tests:
           - not_null
 
       - name: product_retail_price
-        description: ""
+        description: "How much the product retails for on the online store"
         tests:
           - not_null
 
       - name: product_brand
-        description: ""
+        description: "The product brand type"
 
       - name: item_profit
-        description: ""
+        description: "item_sale_price minus product_cost"
         tests:
           - not_null
+          - dbt_utils.expression_is_true:
+              expression: " = (item_sale_price - product_cost)"
 
       - name: item_discount
-        description: ""
+        description: "product_retail_price minus item_sale_price"
         tests:
           - not_null
+          - dbt_utils.expression_is_true:
+              expression: " = (product_retail_price - item_sale_price)"

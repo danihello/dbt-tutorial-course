@@ -7,8 +7,8 @@ models:
       - name: order_id
         description: ""
         tests:
-          - not_null
-          - unique
+          - primary_key:
+              severity: error
 
       - name: user_id
         description: ""
@@ -16,7 +16,8 @@ models:
           - not_null
 
       - name: status
-        description: ""
+        #this is a variable, description references to the "docs status" function we declared in doc_ecommerce__status
+        description: "{{ doc('status') }}"
         tests:
           - accepted_values:
               name: unexpected_order_status
@@ -37,12 +38,18 @@ models:
         tests:
           - not_null:
               where: "status = 'Returned'"
+          - dbt_utils.expression_is_true:
+              expression: ">= delivered_at"
+              where: "delivered_at is not null and returned_at is not null"
 
       - name: shipped_at
         description: "When the order was shipped"
         tests:
           - not_null:
               where: "returned_at is not null or status = 'Shipped'"
+          - dbt_utils.expression_is_true:
+              expression: ">= created_at"
+              where: "shipped_at is not null"
 
 
       - name: delivered_at
@@ -50,8 +57,13 @@ models:
         tests:
           - not_null:
               where: "returned_at is not null or status = 'Complete'"
+          - dbt_utils.expression_is_true:
+              expression: ">= shipped_at"
+              where: "delivered_at is not null and shipped_at is not null"
 
       - name: num_items_ordered
         description: "Number of items in the order"
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0

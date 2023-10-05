@@ -6,6 +6,9 @@ models:
     columns:
       - name: order_item_id
         description: ""
+        tests:
+          - primary_key:
+              severity: error
 
       - name: order_id
         description: ""
@@ -32,3 +35,5 @@ models:
         description: "How much the item sold for"
         tests:
           - not_null
+          - dbt_expectations.expect_column_values_to_be_between:
+              min_value: 0
